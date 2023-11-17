@@ -1,0 +1,59 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+    <link rel="stylesheet" href="style.css">
+    <script src="utils.js"></script>
+</head>
+
+<body>
+    <fieldset>
+        <legend>info</legend>
+        <div class="container">
+            <form action="">
+                <label for="weight">Weight (SI):</label>
+                <input type="number" name="weight" id="weight" oninput="update_weight(this)" placeholder="Weight (kg)" required><br>
+                Weight (imperial):
+                <span id="weight_imperial">
+                    <input type="number" name="weight_stones" id="weight_stones" oninput="update_weight(this)" placeholder="Weight (stone)">
+                    <input type="number" name="weight_pounds" id="weight_pounds" oninput="update_weight(this)" placeholder="Weight (pounds)"><br>
+                    <input type="checkbox" name="only_pounds" id="only_pounds" onchange="hide_stones()">
+                    <label for="only_pounds">Only pounds?</label>
+                </span><br>
+                <hr>
+                <label for="height">Height (SI):</label>
+                <input type="number" name="height" id="height" oninput="update_height(this)" placeholder="Height (cm)" required><br>
+                Height (imperial):
+                <span id="height_imperial">
+                    <input type="number" name="height_feet" id="height_feet" oninput="update_height(this)" placeholder="Height (feet)">
+                    <input type="number" name="height_inches" id="height_inches" oninput="update_height(this)" placeholder="Height (inches)">
+                </span><br>
+                <hr>
+                <input type="number" name="age"    id="age"    placeholder="Age (years)" required><br>
+                <hr>
+                <label for="activity_level">Activity level</label>
+                <select name="activity_level" id="activity_level" required>
+                    <option value="sedentary">Sedentary (no daily activity, no excersise, bed bound)</option>
+                    <option value="light">Light (light daily activity, excersise from time to time)</option>
+                    <option value="moderate">Moderate (moderate daily activity, excersise most days of the week)</option>
+                    <option value="very">Very (highly active, excersise every day)</option>
+                    <option value="extreme">Extreme</option>
+                </select><br>
+                <hr>
+                <input type="radio"  name="sex"    id="male"   value="male"              required>
+                <label for="male">male</label><br>
+                <input type="radio"  name="sex"    id="female" value="female"            required>
+                <label for="female">female</label><br>
+                <hr>
+                <input id="calculate_btn" type="submit" value="Calculate">
+            </form>
+        </div>
+    </fieldset>
+
+    <script src="script.js"></script>
+</body>
+
+</html>
