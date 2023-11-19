@@ -6,11 +6,27 @@ const CM_TO_INCH = 0.393700787;
 const INCH_TO_CM = 1 / CM_TO_INCH;
 const FOOT_TO_INCH = 12;
 const FOOT_TO_CM = FOOT_TO_INCH * INCH_TO_CM;
-console.log(FOOT_TO_CM);
 
-function hide_stones() {
-  let checkbox = document.getElementById("only_pounds");
-  let stones = document.getElementById("weight_stones");
+const CALORIES_IN_KG_OF_FAT = 7700;
+
+function hide_stones(value) {
+  let checkboxes = document.querySelectorAll(".only_pounds");
+  let stones = document.querySelectorAll(".weight_stones");
+  checkboxes.forEach(e => {
+    e.checked = value;
+  });
+  stones.forEach(e => {
+    e.disabled = value;
+    e.hidden = value;
+    if (value) {
+      e.value = 0;
+    }
+  });
+}
+
+function hide_desired_stones() {
+  let checkbox = document.getElementById("desired_only_pounds");
+  let stones = document.getElementById("desired_weight_stones");
   stones.disabled = checkbox.checked;
   stones.hidden = checkbox.checked;
   if (checkbox.checked) {
@@ -83,4 +99,55 @@ function update_height(e) {
   } else {
     height.value = imperial_to_cm(height_feet.value, height_inches.value);
   }
+}
+
+function update_desired_weight(e) {
+  let only_pounds = document.getElementById("desired_only_pounds");
+  let weight = document.getElementById("desired_weight");
+  let weight_stones = document.getElementById("desired_weight_stones");
+  let weight_pounds = document.getElementById("desired_weight_pounds");
+
+  if (e.id == "desired_weight") {
+    w = kg_to_imperial(weight.value, only_pounds.checked);
+    weight_stones.value = w.stones;
+    weight_pounds.value = w.pounds;
+  } else {
+    weight.value = imperial_to_kg(weight_stones.value, weight_pounds.value);
+  }
+}
+
+function update_desired_deficit(value) {
+  document.getElementById("desired_deficit").value = value;
+  document.getElementById("desired_deficit_value").innerText = value;
+
+  // only_pounds = document.getElementById("only_pounds").checked;
+  weight_diff_e = document.getElementById("deficit_to_weight_per_week");
+
+  weight_diff = (value * 7) / CALORIES_IN_KG_OF_FAT;
+  weight_diff_imperial = kg_to_imperial(weight_diff, true);
+
+  weight_diff_e.innerText = `${Math.round((weight_diff+Number.EPSILON)*1000)}g per week / ${weight_diff_imperial.pounds} pound${weight_diff_imperial.pounds===1?'':'s'} per week`; 
+}
+
+function __disable_other_method(disable, enable) {
+  let to_disable = document.querySelectorAll('.' + disable);
+  let to_enable = document.querySelectorAll('.' + enable);
+  to_disable.forEach(e => {
+    e.disabled = true;
+  });
+  to_enable.forEach(e => {
+    e.disabled = false;
+  });
+}
+
+function disable_other_method() {
+  let using_deficit = document.getElementById("desired_method_deficit").checked;
+
+  using_deficit ? __disable_other_method("for_desired_method_time", "for_desired_method_deficit") : __disable_other_method("for_desired_method_deficit", "for_desired_method_time");  
+}
+
+function show_cheatday() {
+  value = document.getElementById("cheatday").checked;
+  document.getElementById("cheatday_options").hidden = !value;
+  document.getElementById("cheatday_value").value = value ? document.getElementById("cheatday_value").value : 0;
 }
