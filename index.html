@@ -4,11 +4,25 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Document</title>
-    <link rel="stylesheet" href="style.css">
+    <title>Calorie intake calculator</title>
+    <link rel="stylesheet" href="style.css" type="text/css">
 </head>
 
 <body>
+    <div id="header">
+        <div class="critical">This calculator is only a brief approximation, all diet calculations are performed on
+            the assumption that there are 7700 calories in a kilogram (2.2 pounds) of fat. This calculator does not take
+            into account
+            the fact that your metabolic rate changes over time. For more accurate weight loss prediction check <a
+                href="https://www.pbrc.edu/research-and-faculty/calculators/weight-loss-predictor/">this</a> website. I
+            am not a health professional, consult your doctor before including any changes into your life.
+        </div>
+        <hr>
+        Made with love and cookies by <a href="https://ksenon.net">xeno</a>. Licensed under <a
+            href="./LICENSE">AGPL</a>.
+        Source code avaliable on <a href="https://github.com/X3NOOO/ccal">github</a>.
+    </div>
+    <hr>
     <fieldset>
         <legend>Your data</legend>
         <div class="input">
@@ -83,7 +97,7 @@
                 <input name="desired_deficit" id="desired_deficit" type="range" value="500" min="0" max="1100"
                     oninput="update_desired_deficit(this.value)" class="for_desired_method_deficit">
                 <span id="desired_deficit_value" name="for_desired_method_deficit"
-                    class="for_desired_method_deficit">500</span>kcal difference per day (
+                    class="for_desired_method_deficit">500</span> kcal difference per day (
                 <span name="deficit_to_weight_per_week" id="deficit_to_weight_per_week">455g per week / 1 pound per
                     week</span> )<br>
                 <input type="radio" name="desired_method" id="desired_method_time" oninput="disable_other_method()"
@@ -98,13 +112,11 @@
                     <option value="years">years</option>
                 </select><br>
                 <hr>
-                <input type="hidden" name="cheatday" value="0">
-                <input type="checkbox" name="cheatday" id="cheatday"
-                    onchange="show_cheatday(); this.previousSibling.value=1-this.previousSibling.value" checked>
+                <input type="checkbox" name="cheatday" id="cheatday" onchange="show_cheatday();" checked>
                 <label for="cheatday">Include cheatday?</label><br>
                 <span id="cheatday_options">
-                    I can spare <input type="number" step="0.01" name="cheatday_value" id="cheatday_value"
-                        placeholder="Number of calories" value="50"> calories daily for the cheatday<br>
+                    I want to save <input type="number" step="0.01" name="cheatday_value" id="cheatday_value"
+                        placeholder="Number of calories" value="50"> calories per day for the cheatday<br>
                 </span>
                 <hr>
                 <input id="calculate_btn" type="submit" value="Calculate">
@@ -112,42 +124,37 @@
         </div>
     </fieldset>
     <br>
-    <fieldset>
+    <fieldset id="output" hidden>
         <legend>Calculated information</legend>
-        <div id="output">
+        <div>
             BMI: <span id="bmi"></span> - <span id="bmi_category"></span><br>
             BMI Healthy weight range (SI): <span id="bmi_healthy_weight_range"></span><br>
             BMI Healthy weight range (Imperial): <span id="bmi_healthy_weight_range_imperial"></span><br>
             <hr>
-            Ideal body weight: <span id="ibw"></span>
+            Ideal body weight (SI): <span id="ibw"></span><br>
+            Ideal body weight (Imperial): <span id="ibw_imperial"></span>
             <hr>
             Basal metabolic rate: <span id="bmr"></span><span class="info">The minimum amount of calories your body uses
                 per day</span><br>
             Total daily energy expenditure: <span id="tdee"></span><span class="info">The amount of calories you have to
                 eat per day in order to maintain your current weight</span><br>
             <hr>
-            Calorie per day budget: <span id="calories_per_day"></span><br>
-            Calorie budget on cheatdays (once per week): <span id="calories_per_cheatday"></span><br>
+            Daily calorie <span id="surplus_or_deficit"></span>: <span id="calorie_diff"></span> kcal
             <hr>
-            You should reach your goal in: <span id="time_to_goal"></span><br>
+            Daily calorie budget: <span id="calories_per_day"></span><span class="info">The amount of calories you have
+                to
+                eat to reach your goal</span><br>
+            <span id="cheatdays">Calorie budget on cheatdays (once per week): <span
+                    id="calories_per_cheatday"></span><br><span id="overcalorie_warning" class="warning" hidden>Warning:
+                    Your calorie budget on the cheatdays is higher than your total energy expenditure! Crank it down a
+                    little.</span></span>
+            <hr>
+            You should reach your goal by: <span id="time_to_goal"></span><br>
         </div>
     </fieldset>
-
-    <div id="footer">
-        <div class="critical">This calculator is only a brief approximation, all diet calculations are performed on
-            the assumption that there are 7700 calories in a kilogram (2.2lbs) of fat. This calculator does not take
-            into account
-            the fact that your metabolic rate changes over time. For more accurate weight loss prediction check <a
-                href="https://www.pbrc.edu/research-and-faculty/calculators/weight-loss-predictor/">this</a> website. I
-            am not a health professional, consult your doctor before including any changes into your life.
-        </div>
-        <hr>
-        Made with love and cookies by <a href="https://ksenon.net">xeno</a>. Licensed under <a
-            href="./LICENSE">AGPL</a>. Source code avaliable on <a href="https://github.com/X3NOOO/ccal">github</a>.
-    </div>
-
-    <script src="script.js"></script>
-    <script src="utils.js"></script>
+    
+    <script src="script.js" type="text/javascript"></script>
+    <script src="utils.js" type="text/javascript"></script>
 </body>
 
 </html>
