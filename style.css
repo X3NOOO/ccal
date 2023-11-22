@@ -1,6 +1,19 @@
 body {
-  height: 100%;
-  width: auto;
+  width: fit-content;
+  margin: 0px;
+  padding: 0px;
+}
+
+#header {
+    padding: 1vh;
+}
+
+body > * {
+  padding: 0.8em;
+}
+
+hr {
+  color: gray;
 }
 
 #calculate_btn {
