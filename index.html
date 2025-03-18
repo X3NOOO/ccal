@@ -4,157 +4,342 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Calorie intake calculator</title>
-    <link rel="stylesheet" href="style.css" type="text/css">
+    <title>Calorie Calculator</title>
+    <link rel="stylesheet" href="style.css">
 </head>
 
 <body>
-    <div id="header">
-        <div class="critical">This calculator is only a brief approximation, all diet calculations are performed on
-            the assumption that there are 7700 calories in a kilogram (2.2 pounds) of fat. This calculator does not take
-            into account
-            the fact that your metabolic rate changes over time. For more accurate weight loss prediction check <a
-                href="https://www.pbrc.edu/research-and-faculty/calculators/weight-loss-predictor/">this</a> website. I
-            am not a health professional, consult your doctor before including any changes into your life.
-        <hr>
+    <div class="container">
+        <div class="header">
+            <h1>Calorie Calculator</h1>
+            <p>Calculate your daily calorie needs to reach your weight goals</p>
         </div>
-        Made with love and cookies by <a href="https://ksenon.net">xeno</a>. Licensed under <a
-            href="./LICENSE">AGPL</a>.
-        Source code avaliable on <a href="https://github.com/X3NOOO/ccal">github</a>.
-        <hr>
-    </div>
-    <fieldset>
-        <legend>Your data</legend>
-        <div class="input">
-            <form action="">
-                <label for="weight">Weight (SI):</label>
-                <input type="number" step="0.01" name="weight" id="weight" oninput="update_weight(this)"
-                    placeholder="Weight (kg)" required><br>
-                Weight (imperial):
-                <span id="weight_imperial">
-                    <input type="number" step="0.01" name="weight_stones" id="weight_stones" class="weight_stones"
-                        oninput="update_weight(this)" placeholder="Weight (stone)">
-                    <input type="number" step="0.01" name="weight_pounds" id="weight_pounds" class="weight_pounds"
-                        oninput="update_weight(this)" placeholder="Weight (pounds)"><br>
-                    <input type="checkbox" name="only_pounds" id="only_pounds" class="only_pounds"
-                        onchange="hide_stones(this.checked)">
-                    <label for="only_pounds">Only pounds?</label>
-                </span><br>
-                <hr>
-                <label for="height">Height (SI):</label>
-                <input type="number" step="0.01" name="height" id="height" oninput="update_height(this)"
-                    placeholder="Height (cm)" required><br>
-                Height (imperial):
-                <span id="height_imperial">
-                    <input type="number" step="0.01" name="height_feet" id="height_feet" oninput="update_height(this)"
-                        placeholder="Height (feet)">
-                    <input type="number" step="0.01" name="height_inches" id="height_inches"
-                        oninput="update_height(this)" placeholder="Height (inches)">
-                </span><br>
-                <hr>
-                <input type="number" step="0.01" name="age" id="age" placeholder="Age (years)" required><br>
-                <hr>
-                <label for="activity_level">Activity level</label>
-                <select name="activity_level" id="activity_level" required>
-                    <option value="sedentary">Sedentary (no daily activity, no excersise, bed bound)</option>
-                    <option value="light">Light (light daily activity, excersise from time to time)</option>
-                    <option value="moderate">Moderate (moderate daily activity, excersise most days of the week)
-                    </option>
-                    <option value="very">Very (highly active, excersise every day)</option>
-                    <option value="extreme">Extreme</option>
-                </select><br>
-                <hr>
-                <input type="radio" name="sex" id="male" value="male" required>
-                <label for="male">male</label><br>
-                <input type="radio" name="sex" id="female" value="female" required>
-                <label for="female">female</label><br>
-                <hr>
-                <label for="desired_weight">Desired weight (SI):</label>
-                <input type="number" step="0.01" name="desired_weight" id="desired_weight"
-                    oninput="update_desired_weight(this)" placeholder="Desired weight (kg)" required><br>
-                Desired weight (imperial):
-                <span id="desired_weight_imperial">
-                    <input type="number" step="0.01" name="desired_weight_stones" class="weight_stones"
-                        id="desired_weight_stones" oninput="update_desired_weight(this)"
-                        placeholder="Desired weight (stone)">
-                    <input type="number" step="0.01" name="desired_weight_pounds" class="weight_pounds"
-                        id="desired_weight_pounds" oninput="update_desired_weight(this)"
-                        placeholder="Desired weight (pounds)"><br>
-                    <input type="checkbox" name="desired_only_pounds" id="desired_only_pounds" class="only_pounds"
-                        onchange="hide_stones(this.checked)">
-                    <label for="desired_only_pounds">Only pounds?</label>
-                </span><br>
-                <hr>
-                <input type="radio" name="desired_method" id="desired_method_deficit" oninput="disable_other_method()"
-                    value="deficit" checked>
-                <label for="desired_method_deficit">I want my diet to be:</label>
-                <select name="desired_deficit_presets" id="desired_deficit_presets"
-                    onchange="update_desired_deficit(this.value)" class="for_desired_method_deficit">
-                    <option value="250">light</option>
-                    <option value="500" selected>normal</option>
-                    <option value="1100">extreme</option>
-                </select>
-                <input name="desired_deficit" id="desired_deficit" type="range" value="500" min="0" max="1100"
-                    oninput="update_desired_deficit(this.value)" class="for_desired_method_deficit">
-                <span id="desired_deficit_value" name="for_desired_method_deficit"
-                    class="for_desired_method_deficit">500</span> kcal difference per day (
-                <span name="deficit_to_weight_per_week" id="deficit_to_weight_per_week">455g per week / 1 pound per
-                    week</span> )<br>
-                <input type="radio" name="desired_method" id="desired_method_time" oninput="disable_other_method()"
-                    value="time">
-                <label for="desired_method_time">I want to reach my goal in:</label>
-                <input type="number" step="0.01" name="desired_time" id="desired_time" placeholder="Time"
-                    class="for_desired_method_time" disabled>
-                <select name="desired_time_unit" id="desired_time_unit" class="for_desired_method_time" disabled>
-                    <option value="days">days</option>
-                    <option value="weeks">weeks</option>
-                    <option value="months" selected>months</option>
-                    <option value="years">years</option>
-                </select><br>
-                <hr>
-                <input type="checkbox" name="cheatday" id="cheatday" onchange="show_cheatday();" checked>
-                <label for="cheatday">Include cheatday?</label><br>
-                <span id="cheatday_options">
-                    I want to save <input type="number" step="0.01" name="cheatday_value" id="cheatday_value"
-                        placeholder="Number of calories" value="50"> calories per day for the cheatday<br>
-                </span>
-                <hr>
-                <input id="calculate_btn" type="submit" value="Calculate">
+
+        <div class="card">
+            <div class="critical">
+                <p>This calculator is only a brief approximation, based on the assumption that there are 7700 calories
+                    in a kilogram (2.2 pounds) of fat. It does not account for metabolic rate changes over time. For
+                    more accurate predictions, check <a
+                        href="https://www.pbrc.edu/research-and-faculty/calculators/weight-loss-predictor/">this
+                        website</a>. Consult your doctor before making any lifestyle changes.</p>
+            </div>
+
+            <details class="form-group settings-group">
+                <summary>
+                    <h3 style="display:inline-block;margin:0;">Settings</h3>
+                </summary>
+                <div style="margin-top:10px;">
+                    <div class="form-row">
+                        <label>Imperial units:</label>
+                    </div>
+                    <div class="form-row">
+                        <div>
+                            <input type="radio" name="imperial_unit" id="pounds_only" value="pounds_only"
+                                onchange="hide_stones(true)" checked>
+                            <label for="pounds_only" style="display:inline;">Pounds only</label>
+                        </div>
+                    </div>
+                    <div class="form-row">
+                        <div>
+                            <input type="radio" name="imperial_unit" id="stones_pounds" value="stones_pounds"
+                                onchange="hide_stones(false)">
+                            <label for="stones_pounds" style="display:inline;">Stones & pounds</label>
+                        </div>
+                    </div>
+
+                    <!-- Add theme settings -->
+                    <div class="form-row" style="margin-top:15px;">
+                        <label>Theme:</label>
+                    </div>
+                    <div class="form-row">
+                        <div>
+                            <input type="radio" name="theme" id="theme_auto" value="auto" checked>
+                            <label for="theme_auto" style="display:inline;">Auto (system preference)</label>
+                        </div>
+                    </div>
+                    <div class="form-row">
+                        <div>
+                            <input type="radio" name="theme" id="theme_light" value="light">
+                            <label for="theme_light" style="display:inline;">Light</label>
+                        </div>
+                    </div>
+                    <div class="form-row">
+                        <div>
+                            <input type="radio" name="theme" id="theme_dark" value="dark">
+                            <label for="theme_dark" style="display:inline;">Dark</label>
+                        </div>
+                    </div>
+                </div>
+            </details>
+
+            <form id="calculator-form">
+                <div class="form-group">
+                    <h3>Current Weight</h3>
+                    <div class="form-row">
+                        <label for="weight">Weight (kg):</label>
+                        <input type="number" step="0.01" name="weight" id="weight" oninput="update_weight(this)"
+                            placeholder="e.g., 70" required>
+                    </div>
+
+                    <div class="form-row">
+                        <label>Imperial:</label>
+                        <div class="imperial-inputs">
+                            <input type="number" step="0.01" name="weight_stones" id="weight_stones"
+                                class="weight_stones" oninput="update_weight(this)" placeholder="stones">
+                            <label for="weight_stones">st</label>
+                            <input type="number" step="0.01" name="weight_pounds" id="weight_pounds"
+                                class="weight_pounds" oninput="update_weight(this)" placeholder="pounds">
+                            <label for="weight_pounds">lb</label>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="form-group">
+                    <h3>Height</h3>
+                    <div class="form-row">
+                        <label for="height">Height (cm):</label>
+                        <input type="number" step="0.01" name="height" id="height" oninput="update_height(this)"
+                            placeholder="e.g., 175" required>
+                    </div>
+
+                    <div class="form-row">
+                        <label>Imperial:</label>
+                        <div class="imperial-inputs">
+                            <input type="number" step="0.01" name="height_feet" id="height_feet"
+                                oninput="update_height(this)" placeholder="feet">
+                            <label for="height_feet">ft</label>
+                            <input type="number" step="0.01" name="height_inches" id="height_inches"
+                                oninput="update_height(this)" placeholder="inches">
+                            <label for="height_inches">in</label>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="form-group">
+                    <h3>Personal Information</h3>
+                    <div class="form-row">
+                        <label for="age">Age (years):</label>
+                        <input type="number" step="0.01" name="age" id="age" placeholder="e.g., 30" required>
+                    </div>
+
+                    <div class="form-row">
+                        <label>Gender:</label>
+                        <div>
+                            <input type="radio" name="sex" id="male" value="male" required>
+                            <label for="male" style="display:inline;">Male</label>
+                            <input type="radio" name="sex" id="female" value="female" required>
+                            <label for="female" style="display:inline;">Female</label>
+                        </div>
+                    </div>
+
+                    <div class="form-row">
+                        <div>
+                            <label for="activity_level">Activity Level:</label>
+                            <select name="activity_level" id="activity_level" required>
+                                <option value="sedentary">Sedentary (little to no exercise)</option>
+                                <option value="light">Light (light exercise 1-3 days/week)</option>
+                                <option value="moderate">Moderate (exercise 3-5 days/week)</option>
+                                <option value="very">Very Active (intense exercise 6-7 days/week)</option>
+                                <option value="extreme">Extremely Active (very intense exercise/sports)</option>
+                            </select>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="form-group">
+                    <h3>Goal Weight</h3>
+                    <div class="form-row">
+                        <label for="desired_weight">Goal Weight (kg):</label>
+                        <input type="number" step="0.01" name="desired_weight" id="desired_weight"
+                            oninput="update_desired_weight(this)" placeholder="e.g., 65" required>
+                    </div>
+
+                    <div class="form-row">
+                        <label>Imperial:</label>
+                        <div class="imperial-inputs">
+                            <input type="number" step="0.01" name="desired_weight_stones" class="weight_stones"
+                                id="desired_weight_stones" oninput="update_desired_weight(this)" placeholder="stones">
+                            <label for="desired_weight_stones">st</label>
+                            <input type="number" step="0.01" name="desired_weight_pounds" class="weight_pounds"
+                                id="desired_weight_pounds" oninput="update_desired_weight(this)" placeholder="pounds">
+                            <label for="desired_weight_pounds">lb</label>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="form-group">
+                    <h3>Goal Method</h3>
+                    <div class="form-row">
+                        <input type="radio" name="desired_method" id="desired_method_deficit"
+                            oninput="disable_other_method()" value="deficit" checked>
+                        <label for="desired_method_deficit" style="display:inline;">Set calorie deficit</label>
+                    </div>
+
+                    <div class="form-row">
+                        <div class="slider-container">
+                            <select name="desired_deficit_presets" id="desired_deficit_presets"
+                                onchange="update_desired_deficit(this.value)" class="for_desired_method_deficit">
+                                <option value="250">Light (slower but easier)</option>
+                                <option value="500" selected>Normal (recommended)</option>
+                                <option value="1100">Aggressive (faster but harder)</option>
+                            </select>
+                            <input name="desired_deficit" id="desired_deficit" type="range" value="500" min="0"
+                                max="1100" oninput="update_desired_deficit(this.value)"
+                                class="slider for_desired_method_deficit">
+                            <div>
+                                <span id="desired_deficit_value" class="for_desired_method_deficit">500</span> kcal per
+                                day
+                                <span class="info">(<span id="deficit_to_weight_per_week">455g per week / 1 pound per
+                                        week</span>)</span>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="form-row">
+                        <input type="radio" name="desired_method" id="desired_method_time"
+                            oninput="disable_other_method()" value="time">
+                        <label for="desired_method_time" style="display:inline;">Set goal time frame</label>
+                    </div>
+
+                    <div class="form-row">
+                        <div>
+                            <input type="number" step="0.01" name="desired_time" id="desired_time"
+                                placeholder="Duration" class="for_desired_method_time" disabled>
+                        </div>
+                        <div>
+                            <select name="desired_time_unit" id="desired_time_unit" class="for_desired_method_time"
+                                disabled>
+                                <option value="days">days</option>
+                                <option value="weeks">weeks</option>
+                                <option value="months" selected>months</option>
+                                <option value="years">years</option>
+                            </select>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="form-group">
+                    <h3>Cheat Day</h3>
+                    <div class="form-row">
+                        <div>
+                            <input type="checkbox" name="cheatday" id="cheatday" onchange="show_cheatday();" checked>
+                            <label for="cheatday" style="display:inline;">Include a weekly cheat day</label>
+                        </div>
+                    </div>
+
+                    <div id="cheatday_options" class="form-row">
+                        <div>
+                            <label for="cheatday_value">Save calories for cheat day:</label>
+                            <input type="number" step="0.01" name="cheatday_value" id="cheatday_value"
+                                placeholder="e.g., 50" value="50">
+                            <span class="info">calories per day</span>
+                        </div>
+                    </div>
+                </div>
+
+                <button type="submit" class="btn">Calculate</button>
             </form>
         </div>
-    </fieldset>
-    <br>
-    <fieldset id="output" hidden>
-        <legend>Calculated information</legend>
-        <div>
-            BMI: <span id="bmi"></span> - <span id="bmi_category"></span><br>
-            BMI Healthy weight range (SI): <span id="bmi_healthy_weight_range"></span><br>
-            BMI Healthy weight range (Imperial): <span id="bmi_healthy_weight_range_imperial"></span><br>
-            <hr>
-            Ideal body weight (SI): <span id="ibw"></span><br>
-            Ideal body weight (Imperial): <span id="ibw_imperial"></span>
-            <hr>
-            Basal metabolic rate: <span id="bmr"></span><span class="info">The minimum amount of calories your body uses
-                per day</span><br>
-            Total daily energy expenditure: <span id="tdee"></span><span class="info">The amount of calories you have to
-                eat per day in order to maintain your current weight</span><br>
-            <hr>
-            Daily calorie <span id="surplus_or_deficit"></span>: <span id="calorie_diff"></span> kcal
-            <hr>
-            Daily calorie budget: <span id="calories_per_day"></span><span class="info">The amount of calories you have
-                to
-                eat to reach your goal</span><br>
-            <span id="cheatdays">Calorie budget on cheatdays (once per week): <span
-                    id="calories_per_cheatday"></span><br><span id="overcalorie_warning" class="warning" hidden>Warning:
-                    Your calorie budget on the cheatdays is higher than your total energy expenditure! Crank it down a
-                    little.</span></span>
-            <hr>
-            You should reach your goal by: <span id="time_to_goal"></span><br>
+
+        <div class="card" id="output" hidden>
+            <h2>Your Results</h2>
+
+            <div class="result-group">
+                <h3>Body Mass Index (BMI)</h3>
+                <div class="result-item">
+                    <span class="result-label">BMI Value:</span>
+                    <span class="result-value" title="Standard BMI formula"><span id="bmi"></span> - <span
+                            id="bmi_category"></span></span>
+                </div>
+                <div class="result-item">
+                    <span class="result-label">Healthy weight range (kg):</span>
+                    <span class="result-value" id="bmi_healthy_weight_range"
+                        title="BMI standard range (18.5-24.9)"></span>
+                </div>
+                <div class="result-item">
+                    <span class="result-label">Healthy weight range (imperial):</span>
+                    <span class="result-value" id="bmi_healthy_weight_range_imperial"
+                        title="BMI standard range (18.5-24.9)"></span>
+                </div>
+            </div>
+
+            <div class="result-group">
+                <h3>Ideal Body Weight</h3>
+                <div class="result-item">
+                    <span class="result-label">Ideal weight (kg):</span>
+                    <span class="result-value" id="ibw" title="Devine formula"></span>
+                </div>
+                <div class="result-item">
+                    <span class="result-label">Ideal weight (imperial):</span>
+                    <span class="result-value" id="ibw_imperial" title="Devine formula"></span>
+                </div>
+            </div>
+
+            <div class="result-group">
+                <h3>Metabolic Rates</h3>
+                <div class="result-item">
+                    <span class="result-label">Basal Metabolic Rate:</span>
+                    <div class="result-value-container">
+                        <span class="result-value" id="bmr" title="Mifflin-St Jeor equation"></span>
+                        <span class="info">Minimum calories your body needs at rest</span>
+                    </div>
+                </div>
+                <div class="result-item">
+                    <span class="result-label">Total Daily Energy Expenditure:</span>
+                    <div class="result-value-container">
+                        <span class="result-value" id="tdee" title="Activity multiplier method"></span>
+                        <span class="info">Calories needed to maintain current weight</span>
+                    </div>
+                </div>
+            </div>
+
+            <div class="result-group">
+                <h3>Your Calorie Plan</h3>
+                <div class="result-item">
+                    <span class="result-label">Daily calorie <span id="surplus_or_deficit"></span>:</span>
+                    <div class="result-value-container">
+                        <span class="result-value" title="User-defined goal"><span id="calorie_diff"></span> kcal</span>
+                    </div>
+                </div>
+                <div class="result-item">
+                    <span class="result-label">Daily calorie budget:</span>
+                    <div class="result-value-container">
+                        <span class="result-value" id="calories_per_day" title="TDEE ± deficit/surplus"></span>
+                        <span class="info">Eat this many calories per day</span>
+                    </div>
+                </div>
+                <div id="cheatdays">
+                    <div class="result-item">
+                        <span class="result-label">Cheat day calorie budget:</span>
+                        <div class="result-value-container">
+                            <span class="result-value" id="calories_per_cheatday"
+                                title="Weekly calorie redistribution"></span>
+                            <span class="info">Once per week</span>
+                        </div>
+                    </div>
+                    <div id="overcalorie_warning" class="warning" hidden>Warning: Your cheat day calories exceed your
+                        TDEE. This may slow your progress.</div>
+                </div>
+            </div>
+
+            <div class="result-group">
+                <h3>Goal Timeline</h3>
+                <div class="result-item">
+                    <span class="result-label">Expected goal date:</span>
+                    <span class="result-value" id="time_to_goal" title="7700 calories per kg of fat model"></span>
+                </div>
+            </div>
         </div>
-    </fieldset>
-    
-    <script src="script.js" type="text/javascript"></script>
-    <script src="utils.js" type="text/javascript"></script>
+
+        <div class="footer">
+            <p>Made with ❤︎ & 🍪︎'s by <a href="https://ksenon.net">xeno</a> | Licensed under <a
+                    href="./LICENSE">AGPL</a> | <a href="https://github.com/X3NOOO/ccal">Source Code</a></p>
+        </div>
+    </div>
+
+    <script src="utils.js"></script>
+    <script src="script.js"></script>
+    <script src="theme.js"></script>
 </body>
 
 </html>

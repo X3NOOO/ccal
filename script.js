@@ -1,3 +1,5 @@
+// i feel like i need to explain myself, see - this thing was first written as a python app, then it was rewriten to a webapp by ai, and then it was rewritten by ai again, sorry
+
 // https://www.fao.org/3/y5686e/y5686e07.htm
 // for some reason these seem to be the most widely used multipliers? i cant find any sources but i'll trust the internet i guess
 const multipliers = {
@@ -52,7 +54,7 @@ class Person {
       Math.round(
         (this.weight / ((this.height / 100) * (this.height / 100)) +
           Number.EPSILON) *
-          10
+        10
       ) / 10
     );
   }
@@ -126,7 +128,6 @@ class Person {
 document.querySelector("form").addEventListener("submit", (e) => {
   e.preventDefault();
   let fd = new FormData(e.target);
-  // store in local storage
   localStorage.removeItem("person");
   localStorage.setItem("person", formSerialize(fd));
 
@@ -138,37 +139,38 @@ document.querySelector("form").addEventListener("submit", (e) => {
     fd.get("activity_level")
   );
 
-  let only_pounds = document.getElementById("only_pounds").checked;
+  let only_pounds = document.getElementById("pounds_only").checked;
 
   document.getElementById("bmi").innerText = p.bmi();
   document.getElementById("bmi_category").innerText = p.bmi_description();
   let normal_bmi_range = p.bmi_normal_weight_range();
   document.getElementById("bmi_healthy_weight_range").innerText =
-    normal_bmi_range.min + "kg - " + normal_bmi_range.max + "kg";
+    normal_bmi_range.min + " kg - " + normal_bmi_range.max + " kg";
   normal_bmi_range_imperial = {
     min: kg_to_imperial(normal_bmi_range.min, only_pounds),
     max: kg_to_imperial(normal_bmi_range.max, only_pounds),
   };
   document.getElementById("bmi_healthy_weight_range_imperial").innerText =
-    normal_bmi_range_imperial.max.stones !== 0
-      ? normal_bmi_range_imperial.min.stones +
-        " stone " +
-        normal_bmi_range_imperial.min.pounds +
-        " pounds - " +
-        normal_bmi_range_imperial.max.stones +
-        " stone " +
-        normal_bmi_range_imperial.max.pounds +
-        " pounds"
-      : normal_bmi_range_imperial.min.pounds +
-        " pounds - " +
-        normal_bmi_range_imperial.max.pounds +
-        " pounds";
-  document.getElementById("ibw").innerText = p.ibw() + "kg";
+    only_pounds
+      ? normal_bmi_range_imperial.min.pounds +
+      " pounds - " +
+      normal_bmi_range_imperial.max.pounds +
+      " pounds"
+      : normal_bmi_range_imperial.min.stones +
+      " stone " +
+      normal_bmi_range_imperial.min.pounds +
+      " pounds - " +
+      normal_bmi_range_imperial.max.stones +
+      " stone " +
+      normal_bmi_range_imperial.max.pounds +
+      " pounds";
+
+  document.getElementById("ibw").innerText = p.ibw() + " kg";
   let ibw_imperial = kg_to_imperial(p.ibw(), only_pounds);
   document.getElementById("ibw_imperial").innerText =
-    ibw_imperial.stones !== 0
-      ? ibw_imperial.stones + " stone " + ibw_imperial.pounds + " pounds"
-      : ibw_imperial.pounds + " pounds";
+    only_pounds
+      ? ibw_imperial.pounds + " pounds"
+      : ibw_imperial.stones + " stone " + ibw_imperial.pounds + " pounds";
   document.getElementById("bmr").innerText =
     Math.round(p.bmr() + Number.EPSILON) + " kcal";
   document.getElementById("tdee").innerText =
@@ -232,7 +234,6 @@ document.querySelector("form").addEventListener("submit", (e) => {
   document.getElementById("output").hidden = false;
 });
 
-// bind to load event
 window.addEventListener("load", () => {
   let p = localStorage.getItem("person");
   let f = document.querySelector("form");
@@ -242,4 +243,6 @@ window.addEventListener("load", () => {
   disable_other_method();
   show_cheatday();
   update_desired_deficit(document.getElementById("desired_deficit").value);
+
+  hide_stones(document.getElementById("pounds_only").checked);
 });

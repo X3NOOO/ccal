@@ -9,19 +9,38 @@ const FOOT_TO_CM = FOOT_TO_INCH * INCH_TO_CM;
 
 const CALORIES_IN_KG_OF_FAT = 7700;
 
-function hide_stones(value) {
-  let checkboxes = document.querySelectorAll(".only_pounds");
-  let stones = document.querySelectorAll(".weight_stones");
-  checkboxes.forEach(e => {
-    e.checked = value;
+function hide_stones(hide) {
+  document.querySelectorAll('.imperial-inputs').forEach(container => {
+    container.classList.toggle('pounds-only-mode', hide);
+
+    const stoneInputs = container.querySelectorAll('.weight_stones');
+    stoneInputs.forEach(input => {
+      input.style.display = hide ? 'none' : '';
+    });
+
+    stoneInputs.forEach(input => {
+      const nextElement = input.nextElementSibling;
+      if (nextElement && nextElement.tagName === 'LABEL') {
+        nextElement.style.display = hide ? 'none' : '';
+      }
+    });
   });
-  stones.forEach(e => {
-    e.disabled = value;
-    e.hidden = value;
-    if (value) {
-      e.value = 0;
-    }
-  });
+
+  let weight = document.getElementById("weight");
+  if (weight && weight.value) {
+    let w = kg_to_imperial(weight.value, hide);
+    document.getElementById("weight_stones").value = w.stones;
+    document.getElementById("weight_pounds").value = w.pounds;
+  }
+
+  let desired_weight = document.getElementById("desired_weight");
+  if (desired_weight && desired_weight.value) {
+    let w = kg_to_imperial(desired_weight.value, hide);
+    let desired_stones = document.getElementById("desired_weight_stones");
+    let desired_pounds = document.getElementById("desired_weight_pounds");
+    if (desired_stones) desired_stones.value = w.stones;
+    if (desired_pounds) desired_pounds.value = w.pounds;
+  }
 }
 
 function hide_desired_stones() {
@@ -58,13 +77,13 @@ function kg_to_imperial(kg, only_pounds) {
 }
 
 function update_weight(e) {
-  let only_pounds = document.getElementById("only_pounds");
+  let pounds_only = document.getElementById("pounds_only").checked;
   let weight = document.getElementById("weight");
   let weight_stones = document.getElementById("weight_stones");
   let weight_pounds = document.getElementById("weight_pounds");
 
   if (e.id == "weight") {
-    w = kg_to_imperial(weight.value, only_pounds.checked);
+    w = kg_to_imperial(weight.value, pounds_only);
     weight_stones.value = w.stones;
     weight_pounds.value = w.pounds;
   } else {
@@ -102,13 +121,13 @@ function update_height(e) {
 }
 
 function update_desired_weight(e) {
-  let only_pounds = document.getElementById("desired_only_pounds");
+  let pounds_only = document.getElementById("pounds_only").checked;
   let weight = document.getElementById("desired_weight");
   let weight_stones = document.getElementById("desired_weight_stones");
   let weight_pounds = document.getElementById("desired_weight_pounds");
 
   if (e.id == "desired_weight") {
-    w = kg_to_imperial(weight.value, only_pounds.checked);
+    w = kg_to_imperial(weight.value, pounds_only);
     weight_stones.value = w.stones;
     weight_pounds.value = w.pounds;
   } else {
@@ -126,7 +145,7 @@ function update_desired_deficit(value) {
   weight_diff = (value * 7) / CALORIES_IN_KG_OF_FAT;
   weight_diff_imperial = kg_to_imperial(weight_diff, true);
 
-  weight_diff_e.innerText = `${Math.round((weight_diff+Number.EPSILON)*1000)}g per week / ${weight_diff_imperial.pounds} pound${weight_diff_imperial.pounds===1?'':'s'} per week`; 
+  weight_diff_e.innerText = `${Math.round((weight_diff + Number.EPSILON) * 1000)}g per week / ${weight_diff_imperial.pounds} pound${weight_diff_imperial.pounds === 1 ? '' : 's'} per week`;
 }
 
 function __disable_other_method(disable, enable) {
@@ -143,7 +162,7 @@ function __disable_other_method(disable, enable) {
 function disable_other_method() {
   let using_deficit = document.getElementById("desired_method_deficit").checked;
 
-  using_deficit ? __disable_other_method("for_desired_method_time", "for_desired_method_deficit") : __disable_other_method("for_desired_method_deficit", "for_desired_method_time");  
+  using_deficit ? __disable_other_method("for_desired_method_time", "for_desired_method_deficit") : __disable_other_method("for_desired_method_deficit", "for_desired_method_time");
 }
 
 function show_cheatday() {
